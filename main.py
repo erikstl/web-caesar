@@ -7,6 +7,7 @@ page_header = """
 <html>
 <head>
     <title>Web Caesar</title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css" media="all">
 </head>
 <body>
     <h1>Web Caesar</h1>
@@ -23,7 +24,7 @@ class Index(webapp2.RequestHandler):
 
     def get(self):
         content = """
-            <form action="/encrypt" method="post">
+            <form action="/encrypt" method="post" class="form">
                 <label><p>Enter text to encrypt:</p>
                 <textarea rows="4" cols="50" name="secret-message"></textarea>
                 <p>Rotation factor:</p>
