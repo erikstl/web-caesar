@@ -19,33 +19,40 @@ page_footer = """
 </html>
 """
 
+def build_page(textarea_content, rotation_content):
+    message_label = "<label><p>Enter text to encrypt:</p></label>"
+    message_input = "<textarea rows='4' cols='50' name='secret-message'>" + textarea_content + "</textarea>"
+
+    rot_label = "<label><p>Rotate by</p></label>"
+    rot_input = "<input type='number' name='rotation' value='" + rotation_content + "'/>"
+
+    submit_button = "<input type='submit' value='Encrypt!'>"
+
+    form = ("<form method='post'>" +
+            message_label + message_input +
+            rot_label + rot_input +
+            "<br>" + submit_button +
+            "</form>")
+
+    return form
 
 class Index(webapp2.RequestHandler):
 
     def get(self):
-        content = """
-            <form action="/encrypt" method="post" class="form">
-                <label><p>Enter text to encrypt:</p>
-                <textarea rows="4" cols="50" name="secret-message"></textarea>
-                <p>Rotation factor:</p>
-                <input type="text" name="rotation"/>
-                <input type="submit" value="Encrypt!"/>
-            </form>
-        """
+        content = build_page("", "")
         self.response.write(page_header + content + page_footer)
 
-class CaesarEncrypt(webapp2.RequestHandler):
     def post(self):
-        #message = "Hello World!"
         message = self.request.get("secret-message")
         rot = self.request.get("rotation")
         encrypted_message = caesar.encrypt(message, rot)
-        content = page_header + "<p>Your encrypted message:</p>" + encrypted_message + page_footer
 
-        self.response.write(content)
+        content = build_page(encrypted_message, rot)
+
+        self.response.write(page_header + content + page_footer)
+
 
 
 app = webapp2.WSGIApplication([
-    ('/', Index),
-    ('/encrypt', CaesarEncrypt)
+    ('/', Index)
 ], debug=True)
